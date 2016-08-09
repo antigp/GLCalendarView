@@ -13,8 +13,8 @@
 
 static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
-#define DEFAULT_PADDING 6;
-#define DEFAULT_ROW_HEIGHT 54;
+#define DEFAULT_PADDING 1
+#define DEFAULT_ROW_HEIGHT 60
 
 @interface GLCalendarView()<UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic, readwrite) NSCalendar *calendar;
@@ -137,7 +137,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     self.padding = appearance.padding ?: DEFAULT_PADDING;
     self.rowHeight = appearance.rowHeight ?: DEFAULT_ROW_HEIGHT;
     self.weekDayTitleAttributes = appearance.weekDayTitleAttributes ?: @{NSFontAttributeName:[UIFont systemFontOfSize:8], NSForegroundColorAttributeName:[UIColor grayColor]};
-    self.monthCoverAttributes = appearance.monthCoverAttributes ?: @{NSFontAttributeName:[UIFont systemFontOfSize:30]};
+    self.monthCoverAttributes = appearance.monthCoverAttributes ?: @{NSFontAttributeName:[UIFont systemFontOfSize:30], NSForegroundColorAttributeName: [UIColor whiteColor]};
     self.monthCoverView.textAttributes = self.monthCoverAttributes;
 }
 
@@ -145,6 +145,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
 - (void)reload
 {
+    [self layoutIfNeeded];
     [self.monthCoverView updateWithFirstDate:self.firstDate lastDate:self.lastDate calendar:self.calendar rowHeight:self.rowHeight];
     [self.collectionView reloadData];
 }
@@ -248,7 +249,8 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
         enlargePoint = ENLARGE_NONE;
     }
     [cell setDate:date range:[self selectedRangeForDate:date] cellPosition:cellPosition enlargePoint:enlargePoint];
-    
+    [cell updateCurrentMonth:self.currentMonth];
+    cell.editMode = _editMode;
     return cell;
 }
 
@@ -265,6 +267,11 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
         }
     }
     return nil;
+}
+
+- (void)setEditMode:(BOOL)editMode {
+    _editMode = editMode;
+    [self reload];
 }
 
 # pragma mark - UICollectionView delegate
@@ -292,6 +299,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
             if (canAdd) {
                 GLCalendarDateRange *rangeToAdd = [self.delegate calenderView:self rangeToAddWithBeginDate:date];
                 [self addRange:rangeToAdd];
+                [self reload];
             }
         }
     }
@@ -325,6 +333,31 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 }
 
 # pragma mark - UIScrollView delegate
+- (void) updateCurrentMonth {
+    NSDate * newCurrentMonth = nil;
+    NSIndexPath * firstIndexPath = [self.collectionView indexPathForItemAtPoint:CGPointMake(DEFAULT_PADDING, self.collectionView.contentOffset.y + DEFAULT_ROW_HEIGHT )];
+    if([[self.collectionView cellForItemAtIndexPath:firstIndexPath] isKindOfClass:[GLCalendarDayCell class]]) {
+        GLCalendarDayCell * cell = [self.collectionView cellForItemAtIndexPath:firstIndexPath];
+        NSDateComponents *components = [[GLDateUtils calendar] components:NSCalendarUnitDay|NSCalendarUnitMonth fromDate:cell.date];
+
+        NSInteger day = components.day;
+        if(day == 1) {
+            newCurrentMonth = [GLDateUtils monthFirstDate:cell.date];
+        }
+        else{
+            newCurrentMonth = [GLDateUtils monthFirstDate:[GLDateUtils dateByAddingMonths:1 toDate:cell.date]];
+        }
+    }
+
+    if(newCurrentMonth != nil && ![newCurrentMonth isEqual:self.currentMonth]) {
+        [self.delegate calenderView:self didChangeMonth:newCurrentMonth];
+        self.currentMonth = newCurrentMonth;
+        for(GLCalendarDayCell * cell in [self.collectionView visibleCells]) {
+            [cell updateCurrentMonth:self.currentMonth];
+        }
+    }
+}
+
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     self.monthCoverView.contentSize = self.collectionView.contentSize;
@@ -339,6 +372,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    [self updateCurrentMonth];
     // update month cover
     self.monthCoverView.contentOffset = self.collectionView.contentOffset;
 }

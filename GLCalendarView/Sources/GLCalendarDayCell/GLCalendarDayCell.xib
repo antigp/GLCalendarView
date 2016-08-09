@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment version="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -13,16 +14,22 @@
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                 <rect key="frame" x="0.0" y="0.0" width="54" height="56"/>
                 <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7PZ-ef-fbF">
+                        <rect key="frame" x="0.0" y="0.0" width="54" height="35"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="35" id="U3W-UR-tb8"/>
+                        </constraints>
+                    </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HQX-TK-Jgx" userLabel="background cover" customClass="GLCalendarDayCellBackgroundCover">
                         <rect key="frame" x="0.0" y="0.0" width="54" height="56"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qzu-El-Gfs" userLabel="day label">
-                        <rect key="frame" x="7" y="8" width="40" height="40"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qzu-El-Gfs" userLabel="day label">
+                        <rect key="frame" x="7" y="16" width="40" height="24"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="40" id="dLs-dr-s8d"/>
-                            <constraint firstAttribute="height" constant="40" id="yuk-wZ-hTi"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -44,14 +51,17 @@
             </view>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="centerY" secondItem="Qzu-El-Gfs" secondAttribute="centerY" id="JcK-sM-fVt"/>
+                <constraint firstAttribute="trailing" secondItem="7PZ-ef-fbF" secondAttribute="trailing" id="Bn1-5v-Qn1"/>
+                <constraint firstItem="7PZ-ef-fbF" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="DZk-Sn-QhE"/>
                 <constraint firstAttribute="centerX" secondItem="Qzu-El-Gfs" secondAttribute="centerX" id="TI3-mt-0qb"/>
+                <constraint firstItem="Qzu-El-Gfs" firstAttribute="baseline" secondItem="7PZ-ef-fbF" secondAttribute="bottom" id="XTp-Pa-nTU"/>
                 <constraint firstItem="0ih-2e-aSb" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="2" id="m5X-LC-15j"/>
                 <constraint firstItem="HQX-TK-Jgx" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="oev-3c-MKK"/>
                 <constraint firstAttribute="bottom" secondItem="HQX-TK-Jgx" secondAttribute="bottom" id="otX-B0-VxV"/>
                 <constraint firstItem="HQX-TK-Jgx" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="puQ-V0-Nr0"/>
                 <constraint firstAttribute="trailing" secondItem="HQX-TK-Jgx" secondAttribute="trailing" id="qa7-L7-lry"/>
                 <constraint firstAttribute="centerX" secondItem="0ih-2e-aSb" secondAttribute="centerX" id="wae-7b-nvD"/>
+                <constraint firstItem="7PZ-ef-fbF" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="xaH-b7-qbz"/>
             </constraints>
             <size key="customSize" width="54" height="56"/>
             <connections>
@@ -64,9 +74,4 @@
             <point key="canvasLocation" x="142" y="157"/>
         </collectionViewCell>
     </objects>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
-    </simulatedMetricsContainer>
 </document>

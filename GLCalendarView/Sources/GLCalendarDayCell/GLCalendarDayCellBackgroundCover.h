@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger, RANGE_POSITION) {
 @property (nonatomic) CGFloat paddingTop;
 @property (nonatomic, strong) UIColor *fillColor;
 @property (nonatomic, strong) UIColor *strokeColor;
+@property (nonatomic, strong) UIColor *defaultStrokeColor;
 @property (nonatomic, strong) UIImage *backgroundImage;
 @property (nonatomic) CGFloat borderWidth;
 @property (nonatomic) BOOL inEdit;
@@ -32,4 +33,6 @@ typedef NS_ENUM(NSInteger, RANGE_POSITION) {
 @property (nonatomic) CGFloat pointScale;
 - (void)enlargeBeginPoint:(BOOL)enlarge;
 - (void)enlargeEndPoint:(BOOL)enlarge;
+@property (nonatomic, strong) UIImage *selectedDayImage UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIImage *deSelectedDayImage UI_APPEARANCE_SELECTOR;
 @end

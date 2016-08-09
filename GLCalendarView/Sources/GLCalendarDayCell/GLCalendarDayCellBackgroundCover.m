@@ -86,19 +86,13 @@
 
 - (GLCalendarRangePoint *)beginPoint
 {
-    if (!_beginPoint) {
-        _beginPoint = [[GLCalendarRangePoint alloc] initWithSize:self.pointSize borderWidth:self.borderWidth strokeColor:self.strokeColor];
-        _beginPoint.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin;
-    }
+   
     return _beginPoint;
 }
 
 - (GLCalendarRangePoint *)endPoint
 {
-    if (!_endPoint) {
-        _endPoint = [[GLCalendarRangePoint alloc] initWithSize:self.pointSize borderWidth:self.borderWidth strokeColor:self.strokeColor];
-        _endPoint.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin;
-    }
+ 
     return _endPoint;
 }
 
@@ -106,12 +100,16 @@
 - (void)drawRect:(CGRect)rect
 {
     [self drawSelectedCover:rect];
-    [self drawTodayCircle:rect];
 }
 
 - (void)drawSelectedCover:(CGRect)rect
 {
+    GLCalendarDayCellBackgroundCover *appearance = [[self class] appearance];
     if (self.rangePosition == RANGE_POSITION_NONE) {
+        if(_inEdit) {
+            UIImage * image = appearance.deSelectedDayImage;
+            [image drawInRect:CGRectMake((rect.size.width - image.size.width)/2, (rect.size.height - image.size.height), image.size.width, image.size.height)];
+        }
         return;
     }
     
@@ -128,9 +126,10 @@
     CGFloat midY = CGRectGetMidY(rect);
     
     UIBezierPath *path = [UIBezierPath bezierPath];
-    if (!self.inEdit && !self.continuousRangeDisplay) {
+    if (!self.continuousRangeDisplay || self.backgroundImage) {
         CGRect rect = CGRectMake(borderWidth + paddingLeft, borderWidth + paddingTop, width - borderWidth * 2 - paddingLeft - paddingRight,  height - borderWidth * 2 - paddingTop * 2);
         if (self.backgroundImage) {
+            CGRect rect = CGRectMake((width - self.backgroundImage.size.width)/2, (height - self.backgroundImage.size.height)/2, self.backgroundImage.size.width,  self.backgroundImage.size.height);
             [self.backgroundImage drawInRect:rect];
             return;
         }
@@ -141,35 +140,80 @@
         return;
     }
     
+    
+    
     if (self.rangePosition == RANGE_POSITION_BEGIN) {
-        [path moveToPoint:CGPointMake(radius + borderWidth + paddingLeft, paddingTop + borderWidth)];
-        [path addArcWithCenter:CGPointMake(radius + borderWidth + paddingLeft, midY) radius:radius startAngle: - M_PI / 2 endAngle: M_PI / 2 clockwise:NO];
-        [path addLineToPoint:CGPointMake(width, height - borderWidth - paddingTop)];
-        [path addLineToPoint:CGPointMake(width, borderWidth + paddingTop)];
-        [path closePath];
+        if(self.inEdit) {
+            [path moveToPoint:CGPointMake(radius + borderWidth + paddingLeft, height-19)];
+            [path addArcWithCenter:CGPointMake(radius + borderWidth + paddingLeft+2, height-(19.f/2.f)) radius:18.f/2.f startAngle: - M_PI / 2 endAngle: M_PI / 2 clockwise:NO];
+            [path addLineToPoint:CGPointMake(width, height)];
+            [path addLineToPoint:CGPointMake(width, height-19)];
+            [path closePath];
+        }
+        else{
+            [path moveToPoint:CGPointMake(radius + borderWidth + paddingLeft, paddingTop + borderWidth)];
+            [path addArcWithCenter:CGPointMake(radius + borderWidth + paddingLeft+2, midY) radius:radius startAngle: - M_PI / 2 endAngle: M_PI / 2 clockwise:NO];
+            [path addLineToPoint:CGPointMake(width, height - borderWidth - paddingTop)];
+            [path addLineToPoint:CGPointMake(width, borderWidth + paddingTop)];
+            [path closePath];
+        }
     } else if (self.rangePosition == RANGE_POSITION_END) {
-        [path moveToPoint:CGPointMake(width - borderWidth - radius - paddingRight, paddingTop + borderWidth)];
-        [path addArcWithCenter:CGPointMake(width - borderWidth - radius - paddingRight, midY) radius:radius startAngle: - M_PI / 2 endAngle: M_PI / 2 clockwise:YES];
-        [path addLineToPoint:CGPointMake(0, height - borderWidth - paddingTop)];
-        [path addLineToPoint:CGPointMake(0, borderWidth + paddingTop)];
-        [path closePath];
+        if(self.inEdit) {
+            [path moveToPoint:CGPointMake(width - borderWidth - radius - paddingRight, height-19)];
+            [path addArcWithCenter:CGPointMake(width - borderWidth - radius - paddingRight-2, height-(19.f/2.f)) radius:18.f/2.f startAngle: - M_PI / 2 endAngle: M_PI / 2 clockwise:YES];
+            [path addLineToPoint:CGPointMake(0, height)];
+            [path addLineToPoint:CGPointMake(0, height-19)];
+            [path closePath];
+        }
+        else{
+            [path moveToPoint:CGPointMake(width - borderWidth - radius - paddingRight, paddingTop + borderWidth)];
+            [path addArcWithCenter:CGPointMake(width - borderWidth - radius - paddingRight-2, midY) radius:radius startAngle: - M_PI / 2 endAngle: M_PI / 2 clockwise:YES];
+            [path addLineToPoint:CGPointMake(0, height - borderWidth - paddingTop)];
+            [path addLineToPoint:CGPointMake(0, borderWidth + paddingTop)];
+            [path closePath];
+        }
     }  else if (self.rangePosition == RANGE_POSITION_MIDDLE){
-        [path moveToPoint:CGPointMake(0, borderWidth + paddingTop)];
-        [path addLineToPoint:CGPointMake(width, borderWidth + paddingTop)];
-        [path addLineToPoint:CGPointMake(width, height - borderWidth - paddingTop)];
-        [path addLineToPoint:CGPointMake(0, height - borderWidth - paddingTop)];
-        [path closePath];
+        if(self.inEdit) {
+            [path moveToPoint:CGPointMake(0, height-19)];
+            [path addLineToPoint:CGPointMake(width, height-19)];
+            [path addLineToPoint:CGPointMake(width,height)];
+            [path addLineToPoint:CGPointMake(0, height)];
+            [path closePath];
+        }
+        else{
+            [path moveToPoint:CGPointMake(0, borderWidth + paddingTop)];
+            [path addLineToPoint:CGPointMake(width, borderWidth + paddingTop)];
+            [path addLineToPoint:CGPointMake(width, height - borderWidth - paddingTop)];
+            [path addLineToPoint:CGPointMake(0, height - borderWidth - paddingTop)];
+            [path closePath];
+        }
     } else if (self.rangePosition == RANGE_POSITION_SINGLE) {
-        path = [UIBezierPath bezierPathWithOvalInRect: CGRectMake(borderWidth + paddingLeft, borderWidth + paddingTop, width - borderWidth * 2 - paddingLeft - paddingRight,  height - borderWidth * 2 - paddingTop * 2)];
-        [path closePath];
+        if(self.inEdit) {
+        }
+        else {
+            path = [UIBezierPath bezierPathWithOvalInRect: CGRectMake(borderWidth + paddingLeft, borderWidth + paddingTop, width - borderWidth * 2 - paddingLeft - paddingRight,  height - borderWidth * 2 - paddingTop * 2)];
+            [path closePath];
+        }
     }
-    if (_inEdit) {
-        path.lineWidth = borderWidth * 2;
-        [self.strokeColor setStroke];
+
+    
+    if (self.defaultStrokeColor) {
+        path.lineWidth = 1;
+        [self.defaultStrokeColor setStroke];
         [path stroke];
     }
-    [self.fillColor setFill];
+    if(_inEdit) {
+        [[UIColor colorWithRed:119.f/255.f green:48.f/255.f blue:48.f/255.f alpha:1] setFill];
+    }
+    else{
+        [self.fillColor setFill];
+    }
     [path fill];
+    
+    if(_inEdit) {
+        UIImage * image = appearance.selectedDayImage;
+        [image drawInRect:CGRectMake((width - image.size.width)/2, (height - image.size.height), image.size.width, image.size.height)];
+    }
 }
 
 - (void)drawTodayCircle:(CGRect)rect

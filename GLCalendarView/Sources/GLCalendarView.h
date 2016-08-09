@@ -12,6 +12,7 @@
 @class GLCalendarView;
 
 @protocol GLCalendarViewDelegate <NSObject>
+- (void)calenderView:(GLCalendarView *)calendarView didChangeMonth:(NSDate *)month;
 - (BOOL)calenderView:(GLCalendarView *)calendarView canAddRangeWithBeginDate:(NSDate *)beginDate;
 - (GLCalendarDateRange *)calenderView:(GLCalendarView *)calendarView rangeToAddWithBeginDate:(NSDate *)beginDate;
 - (void)calenderView:(GLCalendarView *)calendarView beginToEditRange:(GLCalendarDateRange *)range;
@@ -38,6 +39,9 @@
 @property (nonatomic, strong) NSMutableArray *ranges;
 @property (nonatomic) BOOL showMagnifier;
 @property (nonatomic, weak) id<GLCalendarViewDelegate> delegate;
+@property (nonatomic, strong) NSDate* currentMonth;
+@property (nonatomic) BOOL editMode;
+
 - (void)reload;
 - (void)addRange:(GLCalendarDateRange *)range;
 - (void)removeRange:(GLCalendarDateRange *)range;

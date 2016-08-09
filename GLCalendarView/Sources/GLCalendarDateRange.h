@@ -18,6 +18,7 @@
 
 @property (nonatomic, strong) UIImage *backgroundImage;
 @property (nonatomic, strong) UIColor *backgroundColor;
+@property (nonatomic, strong) UIColor *borderColor;
 @property (nonatomic, strong) UIColor *textColor;
 @property (nonatomic, weak) id binding; // you can bind your model here
 + (instancetype)rangeWithBeginDate:(NSDate *)beginDate endDate:(NSDate *)endDate;

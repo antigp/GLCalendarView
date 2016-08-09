@@ -44,6 +44,8 @@ typedef NS_ENUM(NSInteger, RANGE_DISPLAY_MODE) {
 
 @property (nonatomic, readonly) NSDate *date;
 @property (nonatomic, weak, readonly) GLCalendarDateRange *range;
+@property (nonatomic) BOOL editMode;
 
 - (void)setDate:(NSDate *)date range:(GLCalendarDateRange *)range cellPosition:(CELL_POSITION)cellPosition enlargePoint:(ENLARGE_POINT)enlargePoint;
+- (void) updateCurrentMonth: (NSDate*) date;
 @end
