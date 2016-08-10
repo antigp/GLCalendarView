@@ -191,7 +191,8 @@
         if(self.inEdit) {
         }
         else {
-            path = [UIBezierPath bezierPathWithOvalInRect: CGRectMake(borderWidth + paddingLeft+2, borderWidth + paddingTop, width - borderWidth * 2 - paddingLeft - paddingRight - 4,  height - borderWidth * 2 - paddingTop * 2)];
+            CGFloat radius = width - borderWidth * 2 - paddingLeft - paddingRight - 4;
+            path = [UIBezierPath bezierPathWithOvalInRect: CGRectMake((width - radius)/2, (height - radius)/2, radius,  radius)];
             [path closePath];
         }
     }
