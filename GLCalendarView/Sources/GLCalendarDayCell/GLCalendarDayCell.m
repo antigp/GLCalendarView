@@ -195,11 +195,9 @@
         NSInteger month = components.month;
         NSInteger month2 = components2.month;
         if(month == month2) {
-            self.dayLabel.alpha = 1.0;
-            self.backgroundCover.alpha = 1.0;
+            self.dayLabel.alpha = 1.0;            
         }
         else {
-            self.backgroundCover.alpha = 0.5 / abs(month2-month);
             self.dayLabel.alpha = 0.2 / abs(month2-month);
         }
     }
