@@ -144,8 +144,8 @@
     
     if (self.rangePosition == RANGE_POSITION_BEGIN) {
         if(self.inEdit) {
-            [path moveToPoint:CGPointMake(radius + borderWidth + paddingLeft, height-19)];
-            [path addArcWithCenter:CGPointMake(radius + borderWidth + paddingLeft+2, height-(19.f/2.f)) radius:18.f/2.f startAngle: - M_PI / 2 endAngle: M_PI / 2 clockwise:NO];
+            [path moveToPoint:CGPointMake(radius + borderWidth + 10, height-19)];
+            [path addArcWithCenter:CGPointMake(radius + borderWidth + 12, height-(19.f/2.f)) radius:18.f/2.f startAngle: - M_PI / 2 endAngle: M_PI / 2 clockwise:NO];
             [path addLineToPoint:CGPointMake(width, height)];
             [path addLineToPoint:CGPointMake(width, height-19)];
             [path closePath];
@@ -159,8 +159,8 @@
         }
     } else if (self.rangePosition == RANGE_POSITION_END) {
         if(self.inEdit) {
-            [path moveToPoint:CGPointMake(width - borderWidth - radius - paddingRight, height-19)];
-            [path addArcWithCenter:CGPointMake(width - borderWidth - radius - paddingRight-2, height-(19.f/2.f)) radius:18.f/2.f startAngle: - M_PI / 2 endAngle: M_PI / 2 clockwise:YES];
+            [path moveToPoint:CGPointMake(width - borderWidth - radius - 10, height-19)];
+            [path addArcWithCenter:CGPointMake(width - borderWidth - radius - 12, height-(19.f/2.f)) radius:18.f/2.f startAngle: - M_PI / 2 endAngle: M_PI / 2 clockwise:YES];
             [path addLineToPoint:CGPointMake(0, height)];
             [path addLineToPoint:CGPointMake(0, height-19)];
             [path closePath];
